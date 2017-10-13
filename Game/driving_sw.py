@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
-# Módulos
 import sys, pygame
 from pygame.locals import *
- 
-# Constantes
-img_path = 'images'
+
 display_width = 1200
 display_height = 710
-
 def load_image(filename, transparent=False):
         try: image = pygame.image.load(filename)
         except pygame.error, message:
@@ -19,12 +14,9 @@ def load_image(filename, transparent=False):
                 color = image.get_at((0,0))
                 image.set_colorkey(color, RLEACCEL)
         return image
-#white = (255,255,255)
-#pintar todo de (white)
-#gameDisplay.fill(white)
 
 # Clases
-# ---------------------------------------------------------------------
+# ------------------
 class Landscape(pygame.sprite.Sprite):
     def __init__(self, x):
         pygame.sprite.Sprite.__init__(self)
@@ -42,18 +34,17 @@ class Landscape(pygame.sprite.Sprite):
             if keys[K_LEFT]:
                 self.rect.centerx += self.speed * time
 
-    #métodos para perturbar ******************
+    #métodos para perturbar *****
     def set_speed(self, speed):
         self.speed = speed;
-
 
 class Swheel(pygame.sprite.Sprite):
     def __init__(self, x):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("images/s_wheel.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.centerx = 480
-        self.rect.centery = 650
+        self.rect.centerx = 550
+        self.rect.centery = 600
         self.speed = 0.5
 
     def rotar(self, time, keys):
@@ -71,22 +62,18 @@ class Swheel(pygame.sprite.Sprite):
         self.speed = speed;
 
 #Rotar IMG
-def rot_center(image, angle):
-    """rotate an image while keeping its center and size"""
-    orig_rect = image.get_rect()
-    rot_image = pygame.transform.rotate(image, angle)
-    rot_rect = orig_rect.copy()
-    rot_rect.center = rot_image.get_rect().center
-    rot_image = rot_image.subsurface(rot_rect).copy()
-    return rot_image
- 
-# ---------------------------------------------------------------------
+def rotar(image, angle):
+    image_copy = image.copy()
+
+
+
+# --------------
 def main():
     clock = pygame.time.Clock()
     #Window building
     screen = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Drunksi Driving Mode")
-    #background_image = load_image('images/white_back.png')
+    #background_image = load_image('')
 
     #Loading sprites and images
     landscape = Landscape(30)
@@ -96,20 +83,23 @@ def main():
     #Big bucle
     finish = False
     while not finish:
-        #Quit
-        for eventos in pygame.event.get():
-            if eventos.type == QUIT:
-                finish = True
-                sys.exit(0)
+        for event in pygame.event.get():
+            if event.type ==  pygame.QUIT:
+                finish = True;
+            #print(event)
+        #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
         time = clock.tick(60)
         keys = pygame.key.get_pressed()
-        #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-
+        for eventos in pygame.event.get():
+            if eventos.type == QUIT:
+                sys.exit(0)
         landscape.mover(time,keys)
         screen.blit(landscape.image,landscape.rect)
         screen.blit(cockpit, (0,0))
         screen.blit(swheel.image,swheel.rect)
+        #screen.blit(Swheel,(300,500))
+
         pygame.display.update()
 
 pygame.quit()
