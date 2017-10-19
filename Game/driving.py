@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
-# Módulos
 import sys, pygame
 from pygame.locals import *
  
-# Constantes
 img_path = 'images'
 display_width = 1200
 display_height = 710
@@ -19,9 +16,6 @@ def load_image(filename, transparent=False):
                 color = image.get_at((0,0))
                 image.set_colorkey(color, RLEACCEL)
         return image
-#white = (255,255,255)
-#pintar todo de (white)
-#gameDisplay.fill(white)
 
 # Clases
 # ---------------------------------------------------------------------
@@ -92,19 +86,18 @@ def main():
     landscape = Landscape(30)
     swheel = Swheel(30)
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
-   
+    pygame.display.set_mode((0,0),pygame.FULLSCREEN)
     #Big bucle
     finish = False
     while not finish:
-        #Quit
-        for eventos in pygame.event.get():
-            if eventos.type == QUIT:
-                finish = True
-                sys.exit(0)
-
         time = clock.tick(60)
         keys = pygame.key.get_pressed()
-        #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+        #Quit
+        for eventos in pygame.event.get():
+            if eventos.type == QUIT or keys[K_ESCAPE]:
+                finish = True
+                sys.exit(0)                
+
 
         landscape.mover(time,keys)
         screen.blit(landscape.image,landscape.rect)
@@ -113,7 +106,6 @@ def main():
         pygame.display.update()
 
 pygame.quit()
-
 if __name__ == '__main__':
     pygame.init()
     main()
