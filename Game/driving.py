@@ -48,12 +48,14 @@ class Landscape(pygame.sprite.Sprite):
 
 # -----------
 def main():
-
+    #Initial settings
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Drunksi Driving Mode")
     pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-    
+
+
+    #Sprites and images
     landscape = Landscape(30)    
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
@@ -63,15 +65,17 @@ def main():
 
     running = True
     while running:
-        time = clock.tick(60)
         keys = pygame.key.get_pressed()
+        time = clock.tick(60)  
         #Quit or esc
         for eventos in pygame.event.get():
             if eventos.type == QUIT or keys[K_ESCAPE]:
                 running = False
                 sys.exit(0)
-
+        
         landscape.mover(time,keys)
+
+        #Steering wheel
         if keys[K_LEFT] and angle <landscape.bounds:
             angle += landscape.sw_angle
             swheel_copy = pygame.transform.rotate(swheel, angle)
@@ -79,7 +83,7 @@ def main():
             angle -= landscape.sw_angle
             swheel_copy = pygame.transform.rotate(swheel,angle)
 
-        #Mostramos todo
+        #Show stuff
         swheel_rect = swheel_copy.get_rect()
         swheel_rect.center = (480,650)
         screen.blit(landscape.image,landscape.rect)
