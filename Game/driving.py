@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys, pygame
 from pygame.locals import *
- 
-img_path = 'images'
+
 display_width = 1200
 display_height = 710
 
@@ -17,8 +16,7 @@ def load_image(filename, transparent=False):
                 image.set_colorkey(color, RLEACCEL)
         return image
 
-# Clases
-# ---------------------------------------------------------------------
+# Clases---------
 class Landscape(pygame.sprite.Sprite):
     def __init__(self, x):
         pygame.sprite.Sprite.__init__(self)
@@ -27,6 +25,9 @@ class Landscape(pygame.sprite.Sprite):
         self.rect.centerx = display_width/2
         self.rect.centery = display_height/2
         self.speed = 0.5
+        #steering wheel
+        self.sw_angle = 0
+        self.bounds = 0
 
     def mover(self, time, keys):
         if self.rect.left + 700 >= 0:
@@ -37,73 +38,54 @@ class Landscape(pygame.sprite.Sprite):
                 self.rect.centerx += self.speed * time
 
     #métodos para perturbar ******************
+    #velocidad del giro del carro
     def set_speed(self, speed):
         self.speed = speed;
+    #ángulo de rotacion del volante
+    def set_angle(self, angle, bounds):
+        self.sw_angle  = angle
+        self.bounds = bounds
 
-
-class Swheel(pygame.sprite.Sprite):
-    def __init__(self, x):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/s_wheel.png").convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 480
-        self.rect.centery = 650
-        self.speed = 0.5
-
-    def rotar(self, time, keys):
-        if keys[K_RIGHT]:
-            #img_temp = rot_center(self.image,-1)
-            self.image = rot_center(self.image,-1)
-            print('tecla derecha')
-        if keys[K_LEFT]:
-            #img_temp = rot_center(self.image,1)
-            self.image = rot_center(self.image,1)
-            print('tecla izquierda')
-
-    #métodos para perturbar ******************
-    def set_speed(self, speed):
-        self.speed = speed;
-
-#Rotar IMG
-def rot_center(image, angle):
-    """rotate an image while keeping its center and size"""
-    orig_rect = image.get_rect()
-    rot_image = pygame.transform.rotate(image, angle)
-    rot_rect = orig_rect.copy()
-    rot_rect.center = rot_image.get_rect().center
-    rot_image = rot_image.subsurface(rot_rect).copy()
-    return rot_image
- 
-# ---------------------------------------------------------------------
+# -----------
 def main():
+
     clock = pygame.time.Clock()
-    #Window building
     screen = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Drunksi Driving Mode")
-    #background_image = load_image('images/white_back.png')
-
-    #Loading sprites and images
-    landscape = Landscape(30)
-    swheel = Swheel(30)
-    cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-    #Big bucle
-    finish = False
-    while not finish:
+    
+    landscape = Landscape(30)    
+    cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
+    swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
+    swheel_copy = swheel.copy()
+    angle = 0
+    landscape.set_angle(3,120)
+
+    running = True
+    while running:
         time = clock.tick(60)
         keys = pygame.key.get_pressed()
-        #Quit
+        #Quit or esc
         for eventos in pygame.event.get():
             if eventos.type == QUIT or keys[K_ESCAPE]:
-                finish = True
-                sys.exit(0)                
-
+                running = False
+                sys.exit(0)
 
         landscape.mover(time,keys)
+        if keys[K_LEFT] and angle <landscape.bounds:
+            angle += landscape.sw_angle
+            swheel_copy = pygame.transform.rotate(swheel, angle)
+        if keys[K_RIGHT] and angle >-landscape.bounds:
+            angle -= landscape.sw_angle
+            swheel_copy = pygame.transform.rotate(swheel,angle)
+
+        #Mostramos todo
+        swheel_rect = swheel_copy.get_rect()
+        swheel_rect.center = (480,650)
         screen.blit(landscape.image,landscape.rect)
         screen.blit(cockpit, (0,0))
-        screen.blit(swheel.image,swheel.rect)
-        pygame.display.update()
+        screen.blit(swheel_copy, swheel_rect)
+        pygame.display.flip()
 
 pygame.quit()
 if __name__ == '__main__':
