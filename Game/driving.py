@@ -16,7 +16,7 @@ def load_image(filename, transparent=False):
                 image.set_colorkey(color, RLEACCEL)
         return image
 
-# Clases---------
+# Classes---------
 class Landscape(pygame.sprite.Sprite):
     def __init__(self, x):
         pygame.sprite.Sprite.__init__(self)
@@ -37,11 +37,11 @@ class Landscape(pygame.sprite.Sprite):
             if keys[K_LEFT]:
                 self.rect.centerx += self.speed * time
 
-    #métodos para perturbar ******************
-    #velocidad del giro del carro
+    #perturbation methods ******************
+    #turn speed
     def set_speed(self, speed):
         self.speed = speed;
-    #ángulo de rotacion del volante
+    #steering wheel angle and bounds
     def set_angle(self, angle, bounds):
         self.sw_angle  = angle
         self.bounds = bounds
@@ -60,6 +60,8 @@ def main():
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
     swheel_copy = swheel.copy()
+    
+    #Steering wheel initial settings
     angle = 0
     landscape.set_angle(3,120)
 
