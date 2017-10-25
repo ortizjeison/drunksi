@@ -1,0 +1,34 @@
+##################
+FRUIT NINJA
+##################
+-Cosas a eliminar:  
+    credits_screen
+    options_screen
+    customize_screen
+    sounds
+    Customize_Button
+    Sound_Button
+    Wall1_Button
+    Wall2_Button
+    Wall3_Button
+    Wall4_Button
+    Kitchen_Button
+    Fighting_Button
+    CreditsMenu()
+    mixer
+    
+    
+-A modificar: 
+    mp() 
+    
+    
+-A analizar
+    basepoint
+    movepoint
+    collidepoint
+    
+-Ideas: 
+    eliminar mp() para ahorrar tiempo, y llamar de una vez a ubicacion()
+
+    
+    394
