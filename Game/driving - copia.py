@@ -5,6 +5,7 @@ from pygame.locals import *
 
 display_width = 1200
 display_height = 710
+#####insss
 
 def load_image(filename, transparent=False):
         try: image = pygame.image.load(filename)
