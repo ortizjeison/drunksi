@@ -18,7 +18,7 @@ def load_image(filename, transparent=False):
 
 # Classes---------
 class Landscape(pygame.sprite.Sprite):
-    def __init__(self, x):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image("images/landscape_el.png")
         self.rect = self.image.get_rect()
@@ -56,7 +56,7 @@ def main():
 
 
     #Sprites and images
-    landscape = Landscape(30)    
+    landscape = Landscape()    
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
     swheel_copy = swheel.copy()
