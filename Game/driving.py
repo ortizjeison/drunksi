@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys, pygame
+import sys, pygame, time
 from pygame.locals import *
 
 display_width = 1200
@@ -52,18 +52,25 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Drunksi Driving Mode")
-    pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-
+    #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
     #Sprites and images
     landscape = Landscape()    
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
+    intro  = pygame.image.load("images/intro.png").convert_alpha();
+
     swheel_copy = swheel.copy()
     
     #Steering wheel initial settings
     angle = 0
     landscape.set_angle(3,120)
+
+    #Show intro image
+    screen.blit(intro,(0,0))
+    pygame.display.flip()
+    time.sleep(5)
+
 
     running = True
     while running:
@@ -86,6 +93,7 @@ def main():
             swheel_copy = pygame.transform.rotate(swheel,angle)
 
         #Show stuff
+
         swheel_rect = swheel_copy.get_rect()
         swheel_rect.center = (480,650)
         screen.blit(landscape.image,landscape.rect)
