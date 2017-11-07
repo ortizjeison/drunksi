@@ -75,13 +75,11 @@ def main():
     pygame.display.set_caption("Drunksi Driving Mode")
     pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
-
     #Sprites and images
     landscape = Landscape()    
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
     intro  = pygame.image.load("images/load.png").convert_alpha();
-
     swheel_copy = swheel.copy()
     
     #Steering wheel initial settings
@@ -116,7 +114,7 @@ def main():
     exit=Button(exits,exito,480,400)
     cursor1=Cursor()
 
-
+    #Menu while
     while running ==False :
         keys = pygame.key.get_pressed()
 
@@ -137,7 +135,7 @@ def main():
         exit.update(screen,cursor1)
         pygame.display.flip()
 
-
+    #Game while
     while running:
         keys = pygame.key.get_pressed()
         time = clock.tick(60)  
