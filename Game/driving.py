@@ -46,20 +46,41 @@ class Landscape(pygame.sprite.Sprite):
         self.sw_angle  = angle
         self.bounds = bounds
 
+class Button(pygame.sprite.Sprite):
+    def __init__(self,static,over,x,y):
+        self.image_static=static
+        self.image_over=over
+        self.image_current=self.image_static
+        self.rect=self.image_current.get_rect()
+        self.rect.left,self.rect.top=(x,y)
+
+    def update(self,screen,cursor):
+        if cursor.colliderect(self.rect):
+            self.image_current=self.image_over
+        else: self.image_current=self.image_static
+        
+        screen.blit(self.image_current,self.rect)
+
+class Cursor(pygame.Rect):
+    def __init__(self):
+        pygame.Rect.__init__(self,0,0,1,1)
+    def update(self):
+        self.left,self.top=pygame.mouse.get_pos()
+
 # -----------
 def main():
     #Initial settings
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Drunksi Driving Mode")
-    #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+    pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
 
     #Sprites and images
     landscape = Landscape()    
     cockpit = pygame.image.load("images/cockpit.png").convert_alpha()
     swheel = pygame.image.load("images/s_wheel.png").convert_alpha()
-    intro  = pygame.image.load("images/intro.png").convert_alpha();
+    intro  = pygame.image.load("images/load.png").convert_alpha();
 
     swheel_copy = swheel.copy()
     
@@ -71,10 +92,52 @@ def main():
     import time
     screen.blit(intro,(0,0))
     pygame.display.flip()
-    time.sleep(5)
+    time.sleep(2)
+
+    white = (0,0,0)
+    screen.fill(white)
 
 
-    running = True
+######################### Menu ################################
+    #Menu Backgound
+    menu  = pygame.image.load("images/menu.png").convert_alpha();
+    screen.blit(menu,(0,0))
+    pygame.display.flip()
+
+    running = False
+
+    #imagenes botones
+    plays=pygame.image.load("images/buttons/play_s.png")
+    playo=pygame.image.load("images/buttons/play_o.png")
+    exits=pygame.image.load("images/buttons/exit_s.png")
+    exito=pygame.image.load("images/buttons/exit_o.png") 
+    
+    play=Button(plays,playo,480,300)
+    exit=Button(exits,exito,480,400)
+    cursor1=Cursor()
+
+
+    while running ==False :
+        keys = pygame.key.get_pressed()
+
+        for event in pygame.event.get():
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if cursor1.colliderect(play.rect):
+                    running = True
+                if cursor1.colliderect(exit.rect):
+                    sys.exit(0)
+
+            if event.type == QUIT or keys[K_ESCAPE]:
+                running = True
+                sys.exit(0)
+
+        time = clock.tick(60)
+        cursor1.update()
+        play.update(screen,cursor1)
+        exit.update(screen,cursor1)
+        pygame.display.flip()
+
+
     while running:
         keys = pygame.key.get_pressed()
         time = clock.tick(60)  
