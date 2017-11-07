@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys, pygame
 from pygame.locals import *
-
+#change pc
 display_width = 1200
 display_height = 710
 
